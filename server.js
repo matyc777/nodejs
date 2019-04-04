@@ -1,42 +1,20 @@
-const http = require('http');
-const fs = require('fs');
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080;
+var morgan = require('morgan');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+//todo database dependencies
 
-let qs = require('querystring');
+app.use(express.static('./public'));
+app.use(morgan('dev'));//requests to th console
+app.use(bodyParser.urlencoded({'extended': 'true'}));
+app.use(bodyParser.json());
+app.use(bodyParser.json({type: 'application/vnd.api+json'}));
+app.use(methodOverride('X-HTTP-Method-Override'));
 
-/*var mysql = require('mysql');
+require('./app/routes')(app);
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "test"
-});*/
+app.listen(port);
 
-http.createServer((req,res) => {
-    let file;
-    switch(req.url) {
-        case '/':
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            file = fs.readFileSync('./index.html');
-            res.end(file);
-            break;
-        case '/WelcomePage.html':
-            if (req.method == 'POST') {
-                let body = '';
-                req.on('data', function (data) {
-                    body += data;
-                    if (body > 1e6) req.connection.destroy();
-                });
-                req.on('end', function () {
-                    let post = qs.parse(body);
-                    console.log(post['login']);
-                })
-            }
-            ;
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            file = fs.readFileSync('./WelcomePage.html');
-
-            res.end(file);
-            break;
-    }
-}).listen(80, ()=> console.log('Waiting for new users(='));
+console.log("Server is working on port: " + port);
