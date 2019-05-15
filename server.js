@@ -3,6 +3,26 @@ const uuid = require('uuid/v4');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const connection = require('./db/connection.js');
+
+
+
+connection.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+});
+
+//********************************
+/**Example of using db crud methods**/
+//var user = require('./db/crud/user');
+//user.createUser("Max", "dada", 1234, 333);
+//user.updateUser(1, "name", "Alex");
+//user.getUser(1);
+//user.getAllUsers();
+//user.deleteUser(2);
+//*******************************
 const corsOptions = require('./app/cors_options');
 //todo database dependencies
 
