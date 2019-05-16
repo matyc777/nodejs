@@ -17,7 +17,7 @@ function auentification(){
   }
 
   function registration(){
-    axios.post('/registration', {
+    axios.post('/signup', {
       Login: document.getElementById("login").innerText,
       Password: document.getElementById("password").innerText,
       Phone: document.getElementById("phone").innerText
@@ -34,6 +34,26 @@ function auentification(){
       }
     }
 
+  function newOrder(){
+    axios.post('/', {
+      from: document.getElementById("sender_adress").innerText,
+      to: document.getElementById("receiver_adress").innerText,
+      weight: document.getElementById("weight").innerText,
+      deadline: document.getElementById("deadline").innerText
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+    if (this.status == 200){
+      alert("Success!");
+      document.getElementById("new_order").reset();
+    }
+  }
+
   function loadForm(file, insertionElementID) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -44,6 +64,4 @@ function auentification(){
     };
     xhttp.open("GET", file, true);
     xhttp.send();
-
-    
   };
