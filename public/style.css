@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: bolder;
+}
+
+body {
+    background-color: rgb(144, 185, 134);
+    text-align: center;
+}
+
+.container {
+    padding: 100px;
+    display: grid;
+}
+
+form {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+form > * {
+    border-radius: 5px;
+}
+
+select {
+    width: 100px;
+}
+
+select > option {
+    padding: 5px;
+}
+
+select > option:hover {
+    background-color: lightgray;
+}
+
+input {
+    font-size: 16px;
+    padding: 10px;
+    width: 200px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+input:hover {
+    font-weight: 700;
+    background-color: rgb(236, 236, 165);
+    color: black;
+}
+
+.fail {
+    border: 2px  solid red;
+    border-color: red;
+}
+

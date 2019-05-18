@@ -1,0 +1,14 @@
+<form id="login_form" name="auentify" method="POST">
+    Role:
+    <select name="role" id="role" required>
+            <option value="Admin" selected>Admin</option>
+            <option value="Female">Client</option>
+            <option value="Courier">Courier</option>
+    </select><br/><br/>
+      Login:<br/>
+      <input id="login" type="text"><br/>
+      Password:<br/>
+      <input id="password" type="password"><br/><br/>
+      <input type="button" value="Log in" onclick="auentification()"><br/>
+      <input type="button" value="Register" onclick="loadForm('registerForm.html')">
+    </form>
