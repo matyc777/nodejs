@@ -41,7 +41,7 @@ User.getUserByLogin = function get(userLogin, result) {
                 console.error(err);
                 result(err, null);
             }
-            console.log(response);
+            //console.log(response);
             result(null, response);
         });
 };
