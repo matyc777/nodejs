@@ -32,6 +32,20 @@ Request.getRequest = function get(requestId, result) {
         });
 };
 
+Request.getRequestByField = function getByField(field, value, result) {
+    let sql = 'SELECT * FROM delivery_service.request WHERE ?? = ?';
+    let selectQuery = mysql.format(sql, [field, value]);
+    connection.query(selectQuery,
+        (err, response) => {
+            if (err) {
+                console.error(err);
+                result(err, null);
+            }
+            result(null, response);
+        }
+    );
+};
+
 Request.getAllRequests = function getAll() {
     let selectQuery = 'SELECT * FROM delivery_service.request';
     connection.query(selectQuery,
