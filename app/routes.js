@@ -49,15 +49,13 @@ module.exports = function (app) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    app.get('/requestList/:user_id', function (req, res) {
-        //todo get request list from database by user_id
-    });
-
+    /**json in body
+    {
+        "login":"sanya",
+        "password":"123456"
+    }
+     **/
     app.post('/login', function (req, res, next) {
-        /*let text = "qwerty";
-        let enctext = localEncryptor.encrypt(text);
-        console.log(enctext);
-        console.log(localEncryptor.decrypt(enctext));*/
         passport.authenticate('local', (err, user, info) => {
             req.login(user, (err) => {
                 if (user === false) return res.status(400).send("Wrong login or password")
@@ -71,6 +69,14 @@ module.exports = function (app) {
         res.send("Logged out");
     });
 
+    /**json in body
+    {
+        "login":"nikita",
+        "password":"123456",
+        "name":"Paul",
+        "phone":"6208360",
+        "role":"user"
+    }**/
     app.post('/register', function (req, res) {
         switch (req.body.role) {
             case "user":
@@ -87,25 +93,27 @@ module.exports = function (app) {
         }
     });
 
+
+    /**json in body
+    {
+        "from":"Grodno",
+        "to":"Minsk",
+        "weight":"100",
+        "deadline":"29.05.2019"
+    }**/
     app.post('/request', (req, res) => {
-        //let test = undefined;
-        //console.log(req.body.to);
-        // console.log(req.body);
-        // console.log(req.body.from);
-        // console.log(req.body.to);
-        // console.log(req.body.weight);
-        // console.log(req.body.deadline);
-        //console.log(req.session.passport);
-        console.log(req.isAuthenticated());
         if (req.isAuthenticated()) {
             requestCrud.createRequest(req.body.from, req.body.to, req.body.weight, req.body.deadline, req.session.passport.user, null);
-            //console.log(req.body.deadline);
             res.status(200).send("Added");
         } else {
             res.status(401).send("Unauthorized");
         }
     });
 
+    /**json in body
+    {
+        "requestId":"13"
+    }**/
     app.post('/applyingrequest', (req, res) => {
         userCrud.getUser(req.session.passport.user, function (err, user) {
             if (err) {
@@ -113,7 +121,6 @@ module.exports = function (app) {
                 res.status(520).send("Unknown error");
                 return;
             }
-            //console.log(user);
             if (req.isAuthenticated()) {
                 if (user[0].role === 'courier') {
                     requestCrud.getRequest(req.body.requestId, function (err, request) {
@@ -140,6 +147,9 @@ module.exports = function (app) {
         });
     });
 
+    /**../request?id=
+    only client can delete request
+     **/
     app.delete('/request', (req, res) => {
         if (req.isAuthenticated()) {
             requestCrud.getRequest(req.query.id, function (err, request) {
@@ -157,11 +167,30 @@ module.exports = function (app) {
                     res.status(200).send("OK");
                 } else res.status(403).send("Insufficient rights");
             });
-
-
         } else res.status(401).send("Unauthorized");
     });
 
+    app.get('/requests', (req, res) => {
+        if (req.isAuthenticated()) {
+            userCrud.getUser(req.session.passport.user, function (err, user) {
+                if (err) {
+                    console.log(err);
+                    res.status(520).send("Unknown error");
+                    return;
+                }
+                requestCrud.getRequestByField(user[0].role, req.session.passport.user, function (err, request) {
+                    if (err) {
+                        console.log(err);
+                        res.status(520).send("Unknown error");
+                        return;
+                    }
+                    res.status(200).json(request);
+                });
+            });
+        } else res.status(403).send("Insufficient rights");
+    });
+
+    /**../profile?id=*/
     app.get('/profile', (req, res) => {
         userCrud.getUser(req.query.id, function (err, user) {
             if (err) {

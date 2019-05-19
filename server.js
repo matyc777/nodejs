@@ -7,17 +7,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const corsOptions = require('./app/cors_options');
 
-
-//********************************
-/**Example of using db crud methods**/
-//var user = require('./db/crud/user');
-//user.createUser("Max", "dada", 1234, 333);
-//user.updateUser(1, "name", "Alex");
-//user.getUser(1);
-//user.getAllUsers();
-//user.deleteUser(2);
-//*******************************
-
 const app = express();
 const port = process.env.PORT || 3003;
 //const morgan = require('morgan');
